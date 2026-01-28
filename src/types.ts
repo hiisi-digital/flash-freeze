@@ -1,13 +1,5 @@
 /**
- * Flash-Freeze Type System
- *
- * Provides compile-time AND runtime immutability guarantees.
- *
- * TypeScript's `Readonly<T>` is a lie - it's erased at runtime.
- * `Frozen<T>` provides REAL guarantees that work even when:
- * - Pure JS code consumes your transpiled TypeScript
- * - Type assertions bypass the compiler
- * - Dynamic code accesses your data
+ * Type definitions for compile-time and runtime immutability.
  *
  * @module
  */
@@ -91,33 +83,8 @@ export type DeepReadonly<T> = T extends Primitive
 // =============================================================================
 
 /**
- * A deeply frozen object with both compile-time and runtime guarantees.
- *
- * ## Compile-Time
- * - All properties are recursively readonly
- * - TypeScript will error on mutation attempts
- *
- * ## Runtime
- * - Object.freeze() has been called recursively
- * - Mutations throw in strict mode, silently fail otherwise
- * - Works even when consumed by pure JavaScript
- *
- * ## Usage
- * ```ts
- * import { freeze, type Frozen } from "flash-freeze";
- *
- * interface User {
- *   name: string;
- *   tags: string[];
- * }
- *
- * const user: Frozen<User> = freeze({ name: "Alice", tags: ["admin"] });
- *
- * user.name = "Bob";        // TS Error: Cannot assign to 'name'
- * user.tags.push("guest");  // TS Error: Property 'push' does not exist
- *
- * // Even in pure JS, these would throw (strict mode) or silently fail
- * ```
+ * A deeply frozen object with both compile-time (DeepReadonly) and
+ * runtime (Object.freeze) guarantees.
  */
 export type Frozen<T> = DeepReadonly<T> & FrozenBrand;
 
@@ -152,32 +119,7 @@ export type EnsureFrozen<T> = T extends FrozenBrand ? T : Frozen<T>;
 // =============================================================================
 
 /**
- * Interface for types that know how to freeze themselves.
- *
- * Implement this when your type needs custom freezing logic,
- * such as:
- * - Freezing private/internal state
- * - Triggering side effects before freezing
- * - Validating state before making immutable
- * - Transforming data during the freeze process
- *
- * ## Example
- * ```ts
- * class Config implements Freezable<Config> {
- *   private _cache: Map<string, unknown>;
- *
- *   constructor(public readonly values: Record<string, unknown>) {
- *     this._cache = new Map();
- *   }
- *
- *   freeze(): Frozen<Config> {
- *     // Clear cache before freezing (it's now useless)
- *     this._cache.clear();
- *     // Use the library's freeze function
- *     return freeze(this);
- *   }
- * }
- * ```
+ * Interface for types with custom freeze logic.
  */
 export interface Freezable<T = unknown> {
   /**
@@ -205,24 +147,7 @@ export function isFreezable<T>(value: unknown): value is Freezable<T> {
 
 /**
  * Remove frozen brand and readonly modifiers.
- * USE WITH EXTREME CAUTION.
- *
- * This is a type-level escape hatch for when you absolutely need
- * to work with a mutable version of frozen data. The data is still
- * frozen at runtime - this just removes TypeScript's complaints.
- *
- * ## When to Use
- * - Interop with libraries that don't understand readonly
- * - Internal implementation details where you know what you're doing
- * - Testing scenarios
- *
- * ## Example
- * ```ts
- * const frozen: Frozen<User> = freeze(user);
- *
- * // You need to pass to a legacy library that mutates (but you know it won't)
- * legacyLib.process(frozen as Mutable<typeof frozen>);
- * ```
+ * Type-level escape hatch — the data is still frozen at runtime.
  */
 export type Mutable<T> = T extends FrozenBrand
   ? MutableDeep<Thawed<T>>

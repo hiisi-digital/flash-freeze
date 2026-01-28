@@ -63,7 +63,7 @@ import { freeze, frozenCopy, isFrozen, type Frozen } from "@hiisi/flash-freeze";
 
 - `isFrozen(obj)` -- type guard for deep frozen
 - `isShallowFrozen(obj)`, `isDeeplyFrozen(obj)`
-- `assertFrozen(obj, name?)`, `assertShallowFrozen(obj, name?)`, `assertMutable(obj, name?)`
+- `assertFrozen(obj, name?)`, `assertShallowFrozen(obj, name?)`, `assertMutable(obj, name?)` -- throw `FrozenAssertionError`
 - `findUnfrozenPath(obj)` -- returns path to first unfrozen property
 - `countFrozenObjects(obj)` -- `{ frozen, unfrozen, total }`
 
@@ -73,6 +73,7 @@ import { freeze, frozenCopy, isFrozen, type Frozen } from "@hiisi/flash-freeze";
 - `DeepReadonly<T>` -- compile-time only
 - `Thawed<T>` -- extract `T` from `Frozen<T>`
 - `Freezable<T>` -- interface for custom freeze logic
+- `isFreezable(obj)` -- type guard for `Freezable`
 - `Mutable<T>` -- escape hatch (removes readonly)
 
 ## Support

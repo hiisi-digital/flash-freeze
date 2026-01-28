@@ -64,18 +64,18 @@ export function isShallowFrozen(value: unknown): boolean {
  * ```
  */
 export function isFrozen(value: unknown): value is Frozen<unknown> {
-  return isDeeplyFrozen(value, new WeakSet());
+  return isFrozenImpl(value, new WeakSet());
 }
 
 /**
- * Alias for `isFrozen` - explicit name for clarity.
+ * Alias for `isFrozen` - explicit name for those who prefer it.
  */
-export const isDeeplyFrozen = isFrozenImpl;
+export const isDeeplyFrozen: (value: unknown) => value is Frozen<unknown> = isFrozen;
 
 /**
  * Internal implementation with visited set for cycle detection.
  */
-function isFrozenImpl(value: unknown, visited: WeakSet<object> = new WeakSet()): boolean {
+function isFrozenImpl(value: unknown, visited: WeakSet<object>): boolean {
   // Primitives and null/undefined are inherently immutable
   if (value === null || value === undefined) {
     return true;

@@ -1,26 +1,5 @@
 /**
- * Flash-Freeze Core Implementation
- *
  * Stack-based, non-recursive deep freezing with cycle detection.
- * Optimized for speed to justify the "flash" in flash-freeze.
- *
- * ## Performance Optimizations
- *
- * 1. **Stack-based iteration** - No recursive call overhead, no stack overflow
- *    on deeply nested objects
- *
- * 2. **WeakSet cycle detection** - O(1) lookup, handles circular references,
- *    no memory leaks (weak references)
- *
- * 3. **Early termination** - Already-frozen objects skip processing entirely
- *
- * 4. **Indexed loops** - Uses `for` loops with cached length instead of
- *    `for...of` where possible (measurably faster in V8)
- *
- * 5. **Type-specific fast paths** - Arrays and plain objects (most common)
- *    are checked first
- *
- * 6. **Minimal type checks** - Each value's type is checked once, not repeatedly
  *
  * @module
  */
@@ -33,33 +12,12 @@ import { isFreezable } from "./types.ts";
 // =============================================================================
 
 /**
- * Deeply freeze an object and all nested properties.
- *
- * Returns a `Frozen<T>` that provides:
- * - **Compile-time**: All properties recursively readonly
- * - **Runtime**: Object.freeze() applied to everything
- *
- * ## Features
- * - Handles circular references (no infinite loops)
- * - Supports Arrays, Maps, Sets, Dates, RegExps
- * - Calls `.freeze()` on objects implementing `Freezable`
- * - Non-recursive (stack-based) - safe for deeply nested objects
- *
- * ## Performance
- * Uses stack-based iteration with WeakSet cycle detection.
- * Benchmarks show 2-3x faster than naive recursive implementations
- * on deeply nested objects.
+ * Deeply freeze an object and all nested properties in place.
+ * Handles circular references, Arrays, Maps, Sets, Dates, RegExps,
+ * and objects implementing `Freezable`.
  *
  * @param obj - Object to freeze (mutates in place)
  * @returns The same object, now frozen, with Frozen<T> type
- *
- * @example
- * ```ts
- * const data = { users: [{ name: "Alice" }] };
- * const frozen = freeze(data);
- *
- * frozen.users[0].name = "Bob"; // TS Error + Runtime Error (strict mode)
- * ```
  */
 export function freeze<T>(obj: T): Frozen<T> {
   // Primitives and null/undefined pass through
