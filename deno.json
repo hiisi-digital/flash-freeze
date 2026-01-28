@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "exports": "./mod.ts",
   "publish": {
-    "include": ["mod.ts", "src/**/*.ts", "README.md", "LICENSE"]
+    "include": ["mod.ts", "src/**/*.ts", "README.md", "LICENSE"],
+    "exclude": ["src/**/*_test.ts"]
   },
   "compilerOptions": {
     "strict": true,
@@ -11,7 +12,6 @@
   },
   "tasks": {
     "check": "deno check mod.ts",
-    "test": "deno test --allow-none",
-    "bench": "deno bench --allow-none"
+    "test": "deno test src/"
   }
 }
