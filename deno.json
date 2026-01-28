@@ -1,0 +1,17 @@
+{
+  "name": "@hiisi/flash-freeze",
+  "version": "0.1.0",
+  "exports": "./mod.ts",
+  "publish": {
+    "include": ["mod.ts", "src/**/*.ts", "README.md", "LICENSE"]
+  },
+  "compilerOptions": {
+    "strict": true,
+    "noUncheckedIndexedAccess": true
+  },
+  "tasks": {
+    "check": "deno check mod.ts",
+    "test": "deno test --allow-none",
+    "bench": "deno bench --allow-none"
+  }
+}
