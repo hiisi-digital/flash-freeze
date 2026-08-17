@@ -147,7 +147,7 @@ export function isFreezable<T>(value: unknown): value is Freezable<T> {
 
 /**
  * Remove frozen brand and readonly modifiers.
- * Type-level escape hatch — the data is still frozen at runtime.
+ * Type-level escape hatch. The data is still frozen at runtime.
  */
 export type Mutable<T> = T extends FrozenBrand
   ? MutableDeep<Thawed<T>>
