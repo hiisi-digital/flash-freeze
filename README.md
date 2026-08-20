@@ -12,17 +12,21 @@
 
 ## What it does
 
-`flash-freeze` deeply applies `Object.freeze()` and wraps the result in a `Frozen<T>` type
-that is `DeepReadonly<T>` with a runtime brand. TypeScript's `Readonly<T>` is erased at runtime;
-this is not.
+`flash-freeze` deeply applies `Object.freeze()` and wraps the result in a
+`Frozen<T>` type that is `DeepReadonly<T>` with a runtime brand. TypeScript's
+`Readonly<T>` is erased at runtime; this is not.
 
 ```ts
 import { freeze, frozenCopy, isFrozen } from "@hiisi/flash-freeze";
 
 const data = freeze({ users: [{ name: "Alice" }] });
-data.users[0].name = "Bob"; // TS error + runtime error
 
-const snapshot = frozenCopy(mutableState); // clone then freeze
+// @ts-expect-error the whole point: the type is deeply readonly, and the
+// assignment throws at runtime too, because the object really is frozen
+data.users[0].name = "Bob";
+
+const mutableState = { count: 0 };
+const snapshot = frozenCopy(mutableState); // clone, then freeze the clone
 isFrozen(snapshot); // true
 ```
 
@@ -36,7 +40,7 @@ deno add jsr:@hiisi/flash-freeze
 ```
 
 ```ts
-import { freeze, frozenCopy, isFrozen, type Frozen } from "@hiisi/flash-freeze";
+import { freeze, type Frozen, frozenCopy, isFrozen } from "@hiisi/flash-freeze";
 ```
 
 ## API
@@ -59,19 +63,22 @@ import { freeze, frozenCopy, isFrozen, type Frozen } from "@hiisi/flash-freeze";
 
 ### Builders
 
-- `frozenArray(items)`, `frozenArrayOf(...items)`, `frozenArrayFilled(n, val)`, `frozenArrayFrom(n, fn)`
+- `frozenArray(items)`, `frozenArrayOf(...items)`, `frozenArrayFilled(n, val)`,
+  `frozenArrayFrom(n, fn)`
 - `frozenMap(entries)`, `frozenMapFromObject(obj)`
 - `frozenSet(items)`, `frozenSetOf(...items)`
 - `frozenObject(entries)`, `frozen(obj)`
 - `frozenTuple(...items)`, `frozenPair(a, b)`
 - `frozenRecordFrom(keys, fn)`, `frozenRecordFilled(keys, val)`
-- `emptyFrozenArray()`, `emptyFrozenMap()`, `emptyFrozenSet()`, `emptyFrozenObject()`
+- `emptyFrozenArray()`, `emptyFrozenMap()`, `emptyFrozenSet()`,
+  `emptyFrozenObject()`
 
 ### Validation
 
 - `isFrozen(obj)` -- type guard for deep frozen
 - `isShallowFrozen(obj)`, `isDeeplyFrozen(obj)`
-- `assertFrozen(obj, name?)`, `assertShallowFrozen(obj, name?)`, `assertMutable(obj, name?)` -- throw `FrozenAssertionError`
+- `assertFrozen(obj, name?)`, `assertShallowFrozen(obj, name?)`,
+  `assertMutable(obj, name?)` -- throw `FrozenAssertionError`
 - `findUnfrozenPath(obj)` -- returns path to first unfrozen property
 - `countFrozenObjects(obj)` -- `{ frozen, unfrozen, total }`
 
@@ -79,14 +86,16 @@ import { freeze, frozenCopy, isFrozen, type Frozen } from "@hiisi/flash-freeze";
 
 - `Frozen<T>` -- `DeepReadonly<T>` + runtime brand
 - `FrozenBrand` -- the brand itself (type-level only, never added at runtime)
-- `DeepReadonly<T>` -- compile-time only; helpers `DeepReadonlyArray<T>`, `DeepReadonlyMap<K, V>`, `DeepReadonlySet<T>`, `DeepReadonlyObject<T>`
+- `DeepReadonly<T>` -- compile-time only; helpers `DeepReadonlyArray<T>`,
+  `DeepReadonlyMap<K, V>`, `DeepReadonlySet<T>`, `DeepReadonlyObject<T>`
 - `Thawed<T>` -- extract `T` from `Frozen<T>`
 - `IsFrozen<T>` -- `true`/`false` at the type level
 - `EnsureFrozen<T>` -- wrap in `Frozen` unless already branded
 - `Primitive` -- union of types that need no freezing
 - `Freezable<T>` -- interface for custom freeze logic
 - `isFreezable(obj)` -- type guard for `Freezable`
-- `Mutable<T>` -- escape hatch (removes brand and readonly; data stays frozen at runtime)
+- `Mutable<T>` -- escape hatch (removes brand and readonly; data stays frozen at
+  runtime)
 
 ## Support
 
@@ -98,7 +107,8 @@ on open-source projects like this :)
 
 ## License
 
-> You can check out the full license [here](https://github.com/hiisi-digital/flash-freeze/blob/main/LICENSE)
+> You can check out the full license
+> [here](https://github.com/hiisi-digital/flash-freeze/blob/main/LICENSE)
 
 This project is licensed under the terms of the **Mozilla Public License 2.0**.
 
