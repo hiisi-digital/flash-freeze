@@ -12,7 +12,7 @@
 
 ## What it does
 
-`flash-freeze` recursively applies `Object.freeze()` and wraps the result in a `Frozen<T>` type
+`flash-freeze` deeply applies `Object.freeze()` and wraps the result in a `Frozen<T>` type
 that is `DeepReadonly<T>` with a runtime brand. TypeScript's `Readonly<T>` is erased at runtime;
 this is not.
 
@@ -44,10 +44,18 @@ import { freeze, frozenCopy, isFrozen, type Frozen } from "@hiisi/flash-freeze";
 ### Core
 
 - `freeze(obj)` -- deep freeze in place, returns `Frozen<T>`
-- `frozenCopy(obj)` -- clone then freeze (original untouched)
+- `deepFreeze(obj)` -- alias for `freeze`
 - `ensureFrozen(obj)` -- no-op if already frozen
 - `freezeAll(...objs)` -- freeze multiple objects
 - `freezeRecord(record)` -- freeze all values in a record
+
+### Copies and snapshots
+
+- `frozenCopy(obj)` -- clone then freeze (original untouched)
+- `frozenCopyAll(...objs)` -- frozen copies of multiple objects
+- `frozenCopyRecord(record)` -- frozen copies of a record's values
+- `snapshot(obj)` -- alias for `frozenCopy`
+- `snapshotHistory(states)` -- frozen copy of each state in an array
 
 ### Builders
 
@@ -70,11 +78,15 @@ import { freeze, frozenCopy, isFrozen, type Frozen } from "@hiisi/flash-freeze";
 ### Types
 
 - `Frozen<T>` -- `DeepReadonly<T>` + runtime brand
-- `DeepReadonly<T>` -- compile-time only
+- `FrozenBrand` -- the brand itself (type-level only, never added at runtime)
+- `DeepReadonly<T>` -- compile-time only; helpers `DeepReadonlyArray<T>`, `DeepReadonlyMap<K, V>`, `DeepReadonlySet<T>`, `DeepReadonlyObject<T>`
 - `Thawed<T>` -- extract `T` from `Frozen<T>`
+- `IsFrozen<T>` -- `true`/`false` at the type level
+- `EnsureFrozen<T>` -- wrap in `Frozen` unless already branded
+- `Primitive` -- union of types that need no freezing
 - `Freezable<T>` -- interface for custom freeze logic
 - `isFreezable(obj)` -- type guard for `Freezable`
-- `Mutable<T>` -- escape hatch (removes readonly)
+- `Mutable<T>` -- escape hatch (removes brand and readonly; data stays frozen at runtime)
 
 ## Support
 
