@@ -1,5 +1,11 @@
 import { assertEquals, assertThrows } from "jsr:@std/assert";
-import { deepFreeze, ensureFrozen, freeze, freezeAll, freezeRecord } from "./freeze.ts";
+import {
+  deepFreeze,
+  ensureFrozen,
+  freeze,
+  freezeAll,
+  freezeRecord,
+} from "./freeze.ts";
 import type { Freezable, Frozen } from "./types.ts";
 
 // =============================================================================
@@ -263,7 +269,12 @@ Deno.test("freeze - freezes objects with custom prototypes", () => {
 Deno.test("freeze - freezes non-enumerable properties on custom prototype objects", () => {
   class Foo {}
   const obj = new Foo() as any;
-  Object.defineProperty(obj, "hidden", { value: { deep: true }, enumerable: false, writable: true, configurable: true });
+  Object.defineProperty(obj, "hidden", {
+    value: { deep: true },
+    enumerable: false,
+    writable: true,
+    configurable: true,
+  });
   freeze(obj);
   assertEquals(Object.isFrozen(obj), true);
   // Custom prototype path uses getOwnPropertyNames, so non-enumerable props are traversed

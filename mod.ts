@@ -12,10 +12,19 @@
 // =============================================================================
 
 export type {
-    DeepReadonly,
-    DeepReadonlyArray,
-    DeepReadonlyMap, DeepReadonlyObject, DeepReadonlySet, EnsureFrozen, Freezable, Frozen, FrozenBrand, IsFrozen, Mutable,
-    Primitive, Thawed
+  DeepReadonly,
+  DeepReadonlyArray,
+  DeepReadonlyMap,
+  DeepReadonlyObject,
+  DeepReadonlySet,
+  EnsureFrozen,
+  Freezable,
+  Frozen,
+  FrozenBrand,
+  IsFrozen,
+  Mutable,
+  Primitive,
+  Thawed,
 } from "./src/types.ts";
 
 export { isFreezable } from "./src/types.ts";
@@ -25,9 +34,11 @@ export { isFreezable } from "./src/types.ts";
 // =============================================================================
 
 export {
-    deepFreeze,
-    ensureFrozen, freeze, freezeAll,
-    freezeRecord
+  deepFreeze,
+  ensureFrozen,
+  freeze,
+  freezeAll,
+  freezeRecord,
 } from "./src/freeze.ts";
 
 // =============================================================================
@@ -35,11 +46,11 @@ export {
 // =============================================================================
 
 export {
-    frozenCopy,
-    frozenCopyAll,
-    frozenCopyRecord,
-    snapshot,
-    snapshotHistory
+  frozenCopy,
+  frozenCopyAll,
+  frozenCopyRecord,
+  snapshot,
+  snapshotHistory,
 } from "./src/copy.ts";
 
 // =============================================================================
@@ -47,22 +58,30 @@ export {
 // =============================================================================
 
 export {
-    emptyFrozenArray, emptyFrozenMap, emptyFrozenObject, emptyFrozenSet, frozen,
-    // Array builders
-    frozenArray, frozenArrayFilled,
-    frozenArrayFrom, frozenArrayOf,
-    // Map builders
-    frozenMap,
-    frozenMapFromObject,
-    // Object builders
-    frozenObject, frozenPair, frozenRecordFilled,
-    // Record builders
-    frozenRecordFrom,
-    // Set builders
-    frozenSet,
-    frozenSetOf,
-    // Tuple builders
-    frozenTuple
+  emptyFrozenArray,
+  emptyFrozenMap,
+  emptyFrozenObject,
+  emptyFrozenSet,
+  frozen,
+  // Array builders
+  frozenArray,
+  frozenArrayFilled,
+  frozenArrayFrom,
+  frozenArrayOf,
+  // Map builders
+  frozenMap,
+  frozenMapFromObject,
+  // Object builders
+  frozenObject,
+  frozenPair,
+  frozenRecordFilled,
+  // Record builders
+  frozenRecordFrom,
+  // Set builders
+  frozenSet,
+  frozenSetOf,
+  // Tuple builders
+  frozenTuple,
 } from "./src/builders.ts";
 
 // =============================================================================
@@ -70,10 +89,16 @@ export {
 // =============================================================================
 
 export {
-    // Assertions
-    assertFrozen, assertMutable, assertShallowFrozen, countFrozenObjects,
-    // Debug utilities
-    findUnfrozenPath, FrozenAssertionError, isDeeplyFrozen, isFrozen,
-    // Type guards
-    isShallowFrozen
+  // Assertions
+  assertFrozen,
+  assertMutable,
+  assertShallowFrozen,
+  countFrozenObjects,
+  // Debug utilities
+  findUnfrozenPath,
+  FrozenAssertionError,
+  isDeeplyFrozen,
+  isFrozen,
+  // Type guards
+  isShallowFrozen,
 } from "./src/validation.ts";

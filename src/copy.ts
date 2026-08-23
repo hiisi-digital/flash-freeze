@@ -131,7 +131,9 @@ function deepClone<T>(value: T, visited = new WeakMap<object, unknown>()): T {
   // Fast path: Plain objects (most common case)
   const proto = Object.getPrototypeOf(obj);
   if (proto === Object.prototype || proto === null) {
-    const clone = proto === null ? Object.create(null) : {} as Record<string, unknown>;
+    const clone = proto === null
+      ? Object.create(null)
+      : {} as Record<string, unknown>;
     visited.set(obj, clone);
     const keys = Object.keys(obj as Record<string, unknown>);
     for (let i = 0; i < keys.length; i++) {
@@ -217,7 +219,7 @@ export function frozenCopyAll<T extends unknown[]>(
  * @returns New record with frozen copies of values
  */
 export function frozenCopyRecord<K extends string | number | symbol, V>(
-  record: Record<K, V>
+  record: Record<K, V>,
 ): Record<K, Frozen<V>> {
   return overRecord(record, frozenCopy);
 }

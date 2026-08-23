@@ -37,7 +37,7 @@ const _EMPTY_SET = freeze(new Set());
  * ```
  */
 export function frozenObject<K extends string | number | symbol, V>(
-  entries: Iterable<readonly [K, V]>
+  entries: Iterable<readonly [K, V]>,
 ): Frozen<Record<K, V>> {
   const obj = {} as Record<K, V>;
   for (const [key, value] of entries) {
@@ -72,7 +72,9 @@ export function frozen<T extends object>(obj: T): Frozen<T> {
  *
  * @returns Empty frozen object
  */
-export function emptyFrozenObject<T extends object = Record<string, never>>(): Frozen<T> {
+export function emptyFrozenObject<
+  T extends object = Record<string, never>,
+>(): Frozen<T> {
   return _EMPTY_OBJ as Frozen<T>;
 }
 
@@ -156,7 +158,7 @@ export function frozenArrayFilled<T>(length: number, value: T): Frozen<T[]> {
  */
 export function frozenArrayFrom<T>(
   length: number,
-  mapper: (index: number) => T
+  mapper: (index: number) => T,
 ): Frozen<T[]> {
   const arr = new Array<T>(length);
   for (let i = 0; i < length; i++) {
@@ -184,7 +186,7 @@ export function frozenArrayFrom<T>(
  * ```
  */
 export function frozenMap<K, V>(
-  entries: Iterable<readonly [K, V]>
+  entries: Iterable<readonly [K, V]>,
 ): Frozen<Map<K, V>> {
   return freeze(new Map(entries));
 }
@@ -206,7 +208,7 @@ export function frozenMap<K, V>(
  * ```
  */
 export function frozenMapFromObject<V>(
-  obj: Record<string, V>
+  obj: Record<string, V>,
 ): Frozen<Map<string, V>> {
   const map = new Map<string, V>();
   const keys = Object.keys(obj);
@@ -333,7 +335,7 @@ export function frozenPair<A, B>(first: A, second: B): Frozen<[A, B]> {
  */
 export function frozenRecordFrom<K extends string, V>(
   keys: readonly K[],
-  valueMapper: (key: K, index: number) => V
+  valueMapper: (key: K, index: number) => V,
 ): Frozen<Record<K, V>> {
   const obj = {} as Record<K, V>;
   for (let i = 0; i < keys.length; i++) {
@@ -361,7 +363,7 @@ export function frozenRecordFrom<K extends string, V>(
  */
 export function frozenRecordFilled<K extends string, V>(
   keys: readonly K[],
-  value: V
+  value: V,
 ): Frozen<Record<K, V>> {
   const obj = {} as Record<K, V>;
   for (let i = 0; i < keys.length; i++) {

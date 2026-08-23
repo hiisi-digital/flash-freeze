@@ -80,7 +80,9 @@ export function freeze<T>(obj: T): Frozen<T> {
       for (let i = 0; i < keyLen; i++) {
         const key = keys[i]!;
         const value = (currentObj as Record<string, unknown>)[key];
-        if (value !== null && value !== undefined && typeof value === "object") {
+        if (
+          value !== null && value !== undefined && typeof value === "object"
+        ) {
           stack.push(value);
         }
       }
@@ -88,7 +90,9 @@ export function freeze<T>(obj: T): Frozen<T> {
       const symbols = Object.getOwnPropertySymbols(currentObj);
       for (let i = 0; i < symbols.length; i++) {
         const value = (currentObj as Record<symbol, unknown>)[symbols[i]!];
-        if (value !== null && value !== undefined && typeof value === "object") {
+        if (
+          value !== null && value !== undefined && typeof value === "object"
+        ) {
           stack.push(value);
         }
       }
@@ -102,7 +106,9 @@ export function freeze<T>(obj: T): Frozen<T> {
         if (key !== null && key !== undefined && typeof key === "object") {
           stack.push(key);
         }
-        if (value !== null && value !== undefined && typeof value === "object") {
+        if (
+          value !== null && value !== undefined && typeof value === "object"
+        ) {
           stack.push(value);
         }
       }
@@ -135,7 +141,9 @@ export function freeze<T>(obj: T): Frozen<T> {
       const propName = propNames[i]!;
       try {
         const value = (currentObj as Record<string, unknown>)[propName];
-        if (value !== null && value !== undefined && typeof value === "object") {
+        if (
+          value !== null && value !== undefined && typeof value === "object"
+        ) {
           stack.push(value);
         }
       } catch {
@@ -148,7 +156,9 @@ export function freeze<T>(obj: T): Frozen<T> {
     for (let i = 0; i < symProps.length; i++) {
       try {
         const value = (currentObj as Record<symbol, unknown>)[symProps[i]!];
-        if (value !== null && value !== undefined && typeof value === "object") {
+        if (
+          value !== null && value !== undefined && typeof value === "object"
+        ) {
           stack.push(value);
         }
       } catch {
@@ -228,7 +238,7 @@ export function freezeAll<T extends unknown[]>(
  * ```
  */
 export function freezeRecord<K extends string | number | symbol, V>(
-  record: Record<K, V>
+  record: Record<K, V>,
 ): Record<K, Frozen<V>> {
   return overRecord(record, freeze);
 }

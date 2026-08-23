@@ -44,7 +44,10 @@ export type DeepReadonlyArray<T> = ReadonlyArray<DeepReadonly<T>>;
 /**
  * Deep readonly for Maps.
  */
-export type DeepReadonlyMap<K, V> = ReadonlyMap<DeepReadonly<K>, DeepReadonly<V>>;
+export type DeepReadonlyMap<K, V> = ReadonlyMap<
+  DeepReadonly<K>,
+  DeepReadonly<V>
+>;
 
 /**
  * Deep readonly for Sets.
@@ -62,21 +65,14 @@ export type DeepReadonlyObject<T> = {
  * Recursively makes all properties readonly.
  * Unlike TypeScript's built-in `Readonly<T>`, this goes deep.
  */
-export type DeepReadonly<T> = T extends Primitive
-  ? T
-  : T extends Array<infer U>
-    ? DeepReadonlyArray<U>
-    : T extends Map<infer K, infer V>
-      ? DeepReadonlyMap<K, V>
-      : T extends Set<infer U>
-        ? DeepReadonlySet<U>
-        : T extends Function
-          ? T
-          : T extends Date
-            ? Readonly<Date>
-            : T extends RegExp
-              ? Readonly<RegExp>
-              : DeepReadonlyObject<T>;
+export type DeepReadonly<T> = T extends Primitive ? T
+  : T extends Array<infer U> ? DeepReadonlyArray<U>
+  : T extends Map<infer K, infer V> ? DeepReadonlyMap<K, V>
+  : T extends Set<infer U> ? DeepReadonlySet<U>
+  : T extends Function ? T
+  : T extends Date ? Readonly<Date>
+  : T extends RegExp ? Readonly<RegExp>
+  : DeepReadonlyObject<T>;
 
 // =============================================================================
 // Frozen<T> - The Main Type
@@ -149,21 +145,16 @@ export function isFreezable<T>(value: unknown): value is Freezable<T> {
  * Remove frozen brand and readonly modifiers.
  * Type-level escape hatch. The data is still frozen at runtime.
  */
-export type Mutable<T> = T extends FrozenBrand
-  ? MutableDeep<Thawed<T>>
+export type Mutable<T> = T extends FrozenBrand ? MutableDeep<Thawed<T>>
   : MutableDeep<T>;
 
 /**
  * Recursively removes readonly modifiers.
  */
-type MutableDeep<T> = T extends Primitive
-  ? T
-  : T extends ReadonlyArray<infer U>
-    ? Array<MutableDeep<U>>
-    : T extends ReadonlyMap<infer K, infer V>
-      ? Map<MutableDeep<K>, MutableDeep<V>>
-      : T extends ReadonlySet<infer U>
-        ? Set<MutableDeep<U>>
-        : T extends object
-          ? { -readonly [K in keyof T]: MutableDeep<T[K]> }
-          : T;
+type MutableDeep<T> = T extends Primitive ? T
+  : T extends ReadonlyArray<infer U> ? Array<MutableDeep<U>>
+  : T extends ReadonlyMap<infer K, infer V>
+    ? Map<MutableDeep<K>, MutableDeep<V>>
+  : T extends ReadonlySet<infer U> ? Set<MutableDeep<U>>
+  : T extends object ? { -readonly [K in keyof T]: MutableDeep<T[K]> }
+  : T;

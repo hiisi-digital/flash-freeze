@@ -1,15 +1,15 @@
 import { assertEquals, assertThrows } from "jsr:@std/assert";
 import { freeze } from "./freeze.ts";
 import {
-    assertFrozen,
-    assertMutable,
-    assertShallowFrozen,
-    countFrozenObjects,
-    findUnfrozenPath,
-    FrozenAssertionError,
-    isDeeplyFrozen,
-    isFrozen,
-    isShallowFrozen,
+  assertFrozen,
+  assertMutable,
+  assertShallowFrozen,
+  countFrozenObjects,
+  findUnfrozenPath,
+  FrozenAssertionError,
+  isDeeplyFrozen,
+  isFrozen,
+  isShallowFrozen,
 } from "./validation.ts";
 
 // =============================================================================

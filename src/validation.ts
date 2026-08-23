@@ -70,7 +70,8 @@ export function isFrozen(value: unknown): value is Frozen<unknown> {
 /**
  * Alias for `isFrozen` - explicit name for those who prefer it.
  */
-export const isDeeplyFrozen: (value: unknown) => value is Frozen<unknown> = isFrozen;
+export const isDeeplyFrozen: (value: unknown) => value is Frozen<unknown> =
+  isFrozen;
 
 /**
  * Internal implementation with visited set for cycle detection.
@@ -160,7 +161,7 @@ export class FrozenAssertionError extends Error {
   constructor(
     message: string,
     public readonly value: unknown,
-    public readonly path?: string
+    public readonly path?: string,
   ) {
     super(message);
     this.name = "FrozenAssertionError";
@@ -190,13 +191,13 @@ export class FrozenAssertionError extends Error {
  */
 export function assertFrozen(
   value: unknown,
-  name: string = "value"
+  name: string = "value",
 ): asserts value is Frozen<unknown> {
   if (!isFrozen(value)) {
     throw new FrozenAssertionError(
       `Expected ${name} to be deeply frozen, but it is not. ` +
         `Use freeze() or frozenCopy() to create immutable data.`,
-      value
+      value,
     );
   }
 }
@@ -211,12 +212,12 @@ export function assertFrozen(
  */
 export function assertShallowFrozen(
   value: unknown,
-  name: string = "value"
+  name: string = "value",
 ): void {
   if (!isShallowFrozen(value)) {
     throw new FrozenAssertionError(
       `Expected ${name} to be frozen at the top level, but it is not.`,
-      value
+      value,
     );
   }
 }
@@ -239,13 +240,13 @@ export function assertShallowFrozen(
  */
 export function assertMutable(
   value: unknown,
-  name: string = "value"
+  name: string = "value",
 ): void {
   if (value !== null && typeof value === "object" && Object.isFrozen(value)) {
     throw new FrozenAssertionError(
       `Expected ${name} to be mutable, but it is frozen. ` +
         `Create a mutable copy if you need to modify it.`,
-      value
+      value,
     );
   }
 }
@@ -279,7 +280,7 @@ export function findUnfrozenPath(value: unknown): string | null {
 function findUnfrozenPathImpl(
   value: unknown,
   path: string,
-  visited: WeakSet<object>
+  visited: WeakSet<object>,
 ): string | null {
   if (value === null || value === undefined) {
     return null;
@@ -308,7 +309,7 @@ function findUnfrozenPathImpl(
       const result = findUnfrozenPathImpl(
         obj[i],
         path ? `${path}[${i}]` : `[${i}]`,
-        visited
+        visited,
       );
       if (result !== null) return result;
     }
@@ -322,14 +323,14 @@ function findUnfrozenPathImpl(
       const keyResult = findUnfrozenPathImpl(
         key,
         path ? `${path}.keys()[${index}]` : `keys()[${index}]`,
-        visited
+        visited,
       );
       if (keyResult !== null) return keyResult;
 
       const valResult = findUnfrozenPathImpl(
         val,
         path ? `${path}.get(${String(key)})` : `get(${String(key)})`,
-        visited
+        visited,
       );
       if (valResult !== null) return valResult;
 
@@ -345,7 +346,7 @@ function findUnfrozenPathImpl(
       const result = findUnfrozenPathImpl(
         item,
         path ? `${path}.values()[${index}]` : `values()[${index}]`,
-        visited
+        visited,
       );
       if (result !== null) return result;
       index++;
@@ -361,7 +362,7 @@ function findUnfrozenPathImpl(
       const result = findUnfrozenPathImpl(
         propValue,
         path ? `${path}.${propName}` : propName,
-        visited
+        visited,
       );
       if (result !== null) return result;
     } catch {

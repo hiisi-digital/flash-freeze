@@ -1,5 +1,11 @@
 import { assertEquals, assertThrows } from "jsr:@std/assert";
-import { frozenCopy, frozenCopyAll, frozenCopyRecord, snapshot, snapshotHistory } from "./copy.ts";
+import {
+  frozenCopy,
+  frozenCopyAll,
+  frozenCopyRecord,
+  snapshot,
+  snapshotHistory,
+} from "./copy.ts";
 import { isFrozen } from "./validation.ts";
 
 // =============================================================================
