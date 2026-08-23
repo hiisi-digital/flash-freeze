@@ -9,6 +9,7 @@
 
 import { freeze } from "./freeze.ts";
 import type { Frozen } from "./types.ts";
+import { overAll, overRecord } from "./over.ts";
 
 // =============================================================================
 // Core Copy Function
@@ -206,11 +207,7 @@ function deepClone<T>(value: T, visited = new WeakMap<object, unknown>()): T {
 export function frozenCopyAll<T extends unknown[]>(
   ...objects: T
 ): { [K in keyof T]: Frozen<T[K]> } {
-  const result = new Array(objects.length);
-  for (let i = 0; i < objects.length; i++) {
-    result[i] = frozenCopy(objects[i]);
-  }
-  return result as { [K in keyof T]: Frozen<T[K]> };
+  return overAll(objects, frozenCopy);
 }
 
 /**
@@ -222,15 +219,7 @@ export function frozenCopyAll<T extends unknown[]>(
 export function frozenCopyRecord<K extends string | number | symbol, V>(
   record: Record<K, V>
 ): Record<K, Frozen<V>> {
-  const result = {} as Record<K, Frozen<V>>;
-  const keys = Object.keys(record) as K[];
-
-  for (let i = 0; i < keys.length; i++) {
-    const key = keys[i]!;
-    result[key] = frozenCopy(record[key]);
-  }
-
-  return result;
+  return overRecord(record, frozenCopy);
 }
 
 // =============================================================================

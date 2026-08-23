@@ -394,6 +394,13 @@ export function countFrozenObjects(value: unknown): {
   let frozen = 0;
   let unfrozen = 0;
 
+  /**
+   * Walk one value, tallying it and everything it reaches.
+   *
+   * Recursive rather than iterative because the shapes this counts are
+   * already bounded by `freeze` having walked them, and `visited` is what
+   * stops a cycle rather than the depth.
+   */
   function count(val: unknown): void {
     if (val === null || val === undefined) return;
 

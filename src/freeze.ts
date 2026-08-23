@@ -6,6 +6,7 @@
 
 import type { Frozen } from "./types.ts";
 import { isFreezable } from "./types.ts";
+import { overAll, overRecord } from "./over.ts";
 
 // =============================================================================
 // Core Freeze Function
@@ -207,11 +208,7 @@ export function ensureFrozen<T>(obj: T): Frozen<T> {
 export function freezeAll<T extends unknown[]>(
   ...objects: T
 ): { [K in keyof T]: Frozen<T[K]> } {
-  const result = new Array(objects.length);
-  for (let i = 0; i < objects.length; i++) {
-    result[i] = freeze(objects[i]);
-  }
-  return result as { [K in keyof T]: Frozen<T[K]> };
+  return overAll(objects, freeze);
 }
 
 /**
@@ -233,11 +230,5 @@ export function freezeAll<T extends unknown[]>(
 export function freezeRecord<K extends string | number | symbol, V>(
   record: Record<K, V>
 ): Record<K, Frozen<V>> {
-  const result = {} as Record<K, Frozen<V>>;
-  const keys = Object.keys(record) as K[];
-  for (let i = 0; i < keys.length; i++) {
-    const key = keys[i]!;
-    result[key] = freeze(record[key]);
-  }
-  return result;
+  return overRecord(record, freeze);
 }
