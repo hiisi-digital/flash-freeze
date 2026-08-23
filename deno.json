@@ -1,6 +1,6 @@
 {
   "name": "@hiisi/flash-freeze",
-  "version": "0.1.1",
+  "version": "0.1.1-alpha.1",
   "description": "Deep immutability with compile-time and runtime guarantees.",
   "exports": "./mod.ts",
   "publish": {
